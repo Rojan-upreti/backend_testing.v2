@@ -5,6 +5,7 @@ import authRoutes from './routes/auth.js';
 import appRoutes from './routes/apps.js';
 import githubRoutes from './routes/github.js';
 import auditRoutes from './routes/audit.js';
+import cliRoutes from './routes/cli.js';
 
 dotenv.config();
 
@@ -35,6 +36,9 @@ app.use('/api/github', githubRoutes);
 
 // Audit routes
 app.use('/api/audit', auditRoutes);
+
+// CLI routes
+app.use('/api/cli', cliRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
