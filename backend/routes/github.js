@@ -72,6 +72,23 @@ const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || 'ea49fd5f5d3e78
 const GITHUB_REDIRECT_URI = process.env.GITHUB_REDIRECT_URI || 'http://localhost:5000/api/github/callback';
 
 /**
+ * GET /api/github
+ * List available GitHub endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'GitHub API endpoints',
+    endpoints: {
+      'GET /api/github/auth': 'Initiate GitHub OAuth flow',
+      'GET /api/github/callback': 'Handle GitHub OAuth callback',
+      'GET /api/github/repos': 'Get user repositories',
+      'POST /api/github/clone': 'Clone repository and save to Firestore'
+    }
+  });
+});
+
+/**
  * GET /api/github/auth
  * Initiate GitHub OAuth flow
  */

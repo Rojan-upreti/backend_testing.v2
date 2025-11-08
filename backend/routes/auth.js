@@ -5,6 +5,21 @@ import { auth } from '../config/firebase-admin.js';
 const router = express.Router();
 
 /**
+ * GET /api/auth
+ * List available auth endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Auth API endpoints',
+    endpoints: {
+      'POST /api/auth/verify': 'Verify Firebase ID token',
+      'GET /api/auth/check': 'Check if user is authenticated'
+    }
+  });
+});
+
+/**
  * POST /api/auth/verify
  * Verify Firebase ID token from frontend
  */
