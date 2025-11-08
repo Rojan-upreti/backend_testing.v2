@@ -7,6 +7,11 @@ import githubRoutes from './routes/github.js';
 import auditRoutes from './routes/audit.js';
 import cliRoutes from './routes/cli.js';
 
+// Verify CLI routes are loaded
+if (!cliRoutes) {
+  console.error('Warning: CLI routes failed to load');
+}
+
 dotenv.config();
 
 const app = express();
@@ -19,6 +24,23 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Server is running',
+    version: '1.0.0',
+    endpoints: {
+      health: '/health',
+      auth: '/api/auth',
+      apps: '/api/apps',
+      github: '/api/github',
+      audit: '/api/audit',
+      cli: '/api/cli'
+    }
+  });
+});
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -39,6 +61,7 @@ app.use('/api/audit', auditRoutes);
 
 // CLI routes
 app.use('/api/cli', cliRoutes);
+console.log('CLI routes registered at /api/cli');
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -51,7 +74,19 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  res.status(404).json({ 
+    error: 'Route not found',
+    message: `The route ${req.method} ${req.path} was not found on this server`,
+    availableEndpoints: {
+      health: 'GET /health',
+      root: 'GET /',
+      auth: '/api/auth/*',
+      apps: '/api/apps/*',
+      github: '/api/github/*',
+      audit: '/api/audit/*',
+      cli: '/api/cli/*'
+    }
+  });
 });
 
 // Start server
